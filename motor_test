@@ -1,0 +1,26 @@
+import RPi.GPIO as GPIO
+import time
+
+motor_pin = 12  # adjust this to your pin
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(motor_pin, GPIO.OUT)
+
+def motor_on():
+    GPIO.output(motor_pin, GPIO.HIGH)
+
+def motor_off():
+    GPIO.output(motor_pin, GPIO.LOW)
+
+try:
+    while True:
+        user_input = input("1 to turn ON, 0 to turn OFF, q to quit: ").strip().lower()
+
+        if user_input == '1':
+            motor_on()
+        elif user_input == '0':
+            motor_off()
+        elif user_input == 'q':
+            break
+
+finally:
+    GPIO.cleanup()
