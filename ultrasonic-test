@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+import RPi.GPIO as GPIO
+import time
+
+trig_pin = 11
+echo_pin = 12
+
+def setup():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(trig_pin, GPIO.OUT)
+    GPIO.setup(echo_pin, GPIO.IN)
+
+
+def distance():
+    GPIO.output(trig_pin, GPIO.LOW)
+    time.sleep(0.000001)
+    GPIO.output(trig_pin, GPIO.HIGH)
+    time.sleep(0.00001)
+
+    while GPIO.input(echo_pin) == 0: #while echo_pin is set to GPIO.LOW
+        pass
+    time1 = time.time()
+
+    while GPIO.input(echo_pin) == 1: #While echo_pin is set to GPIO.HIGH
+        pass
+    time2 = time.time()
+
+    duration = time2 - time1
+
+    distance_cm = (duration * 340 / 2) * 100
+
+    return distance_cm
+
+def loop():
+    while True:
+        dis = distance()
+        print(f'{dis:.2f} cm')
+        time.sleep(0.2)
+
+if __name__ == "__main__":
+    setup()
+    try:
+        loop()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+
+
