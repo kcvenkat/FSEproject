@@ -1,15 +1,22 @@
 import RPi.GPIO as GPIO
-import time
+from time import sleep
 
 motor_pin = 12  # adjust this to your pin
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(motor_pin, GPIO.OUT)
 
-def motor_on():
-    GPIO.output(motor_pin, GPIO.HIGH)
+motor_pwm = GPIO.PWM(motor_pin, 1000)
+motor_pwm.start(0)
+
+def motor_on(intensity = 50):
+    while True:
+        motor_pwm.ChangeDutyCycle(intensity)
+        sleep(0.2)
+        motor_pwm.ChangeDutyCycle(intensity)
+        sleep(0.2)
 
 def motor_off():
-    GPIO.output(motor_pin, GPIO.LOW)
+    motor_pwm.ChangeDutyCycle(0)
 
 try:
     while True:
