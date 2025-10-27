@@ -7,14 +7,16 @@ motor_pin = 7
 trig_pin = 11
 echo_pin = 12
 
-motor_pwm = GPIO.PWM(motor_pin, 1000)
-motor_pwm.start(0)
-
 def setup():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(motor_pin, GPIO.OUT)
     GPIO.setup(trig_pin, GPIO.OUT)
     GPIO.setup(echo_pin, GPIO.IN)
+
+
+    global motor_pwm
+    motor_pwm = GPIO.PWM(motor_pin, 1000)
+    motor_pwm.start(0)
 
 
 def distance():
@@ -65,3 +67,4 @@ if __name__ == "__main__":
         loop()
     except KeyboardInterrupt:
         GPIO.cleanup()
+
