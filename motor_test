@@ -12,7 +12,7 @@ def motor_on(intensity = 50):
     while True:
         motor_pwm.ChangeDutyCycle(intensity)
         sleep(0.2)
-        motor_pwm.ChangeDutyCycle(intensity)
+        motor_pwm.ChangeDutyCycle(0)
         sleep(0.2)
 
 def motor_off():
