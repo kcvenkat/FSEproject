@@ -5,33 +5,30 @@ buzzer_pin = 11
 
 def setup():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(motion_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(motion_pin, GPIO.IN)
     GPIO.setup(buzzer_pin, GPIO.OUT)
 
-    global buzzer_pwm
-    buzzer_pwm = GPIO.PWM(buzzer_pin, 1000)
-
-    buzzer_pwm.start(0)
+    GPIO.output(buzzer_pin, GPIO.HIGH)
 
     print("Calibrating...")
-    sleep(15) 
+    sleep(5) 
     print("Ready!")
 
-def buzzer_on(intensity, sleep_time):
-    buzzer_pwm.ChangeDutyCycle(intensity)
+def buzzer_on(sleep_time):
+    GPIO.output(buzzer_pin, GPIO.LOW)
     sleep(sleep_time)
-    buzzer_pwm.ChangeDutyCycle(0)
+    GPIO.output(buzzer_pin, GPIO.HIGH)
     sleep(sleep_time)
 
 def buzzer_off():
-    buzzer_pwm.ChangeDutyCycle(0) 
+    GPIO.output(buzzer_pin, GPIO.HIGH) 
 
 def loop():
     while True:
         motion = GPIO.input(motion_pin)
         print(motion)
         if motion == 1:
-            buzzer_on(50, 0.5)
+            buzzer_on(0.1)
         elif motion == 0:
             buzzer_off()
         else:
