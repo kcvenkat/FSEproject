@@ -1,38 +1,36 @@
 import RPi.GPIO as GPIO
 from time import sleep
-motion_pin = 12
-buzzer_pin = 11
+
+MOTION_PIN = 12
+BUZZER_PIN = 11
 
 def setup():
+    GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(motion_pin, GPIO.IN)
-    GPIO.setup(buzzer_pin, GPIO.OUT)
 
-    GPIO.output(buzzer_pin, GPIO.HIGH)
+    GPIO.setup(MOTION_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-    print("Calibrating...")
-    sleep(5) 
+    GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
+
+    print("Calibrating PIR...")
+    sleep(5)
     print("Ready!")
 
-def buzzer_on(sleep_time):
-    GPIO.output(buzzer_pin, GPIO.LOW)
-    sleep(sleep_time)
-    GPIO.output(buzzer_pin, GPIO.HIGH)
-    sleep(sleep_time)
-
-def buzzer_off():
-    GPIO.output(buzzer_pin, GPIO.HIGH) 
+def beep(duration=0.1):
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    sleep(duration)
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
 def loop():
     while True:
-        motion = GPIO.input(motion_pin)
+        motion = GPIO.input(MOTION_PIN)
         print(motion)
-        if motion == 1:
-            buzzer_on(0.1)
-        elif motion == 0:
-            buzzer_off()
+        if motion:
+            beep(0.1)
+            sleep(0.1)
         else:
-            pass
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
+            sleep(0.02)
 
 def destroy():
     GPIO.cleanup()
