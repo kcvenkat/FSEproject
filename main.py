@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-motor_pin = 7
+motor_pin = 36
 trig_pin = 11
 echo_pin = 12
 motion_pin = 13
