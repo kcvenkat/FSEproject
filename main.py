@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-motor_pin = 36
+motor_pin = 7
 trig_pin = 11
 echo_pin = 12
 motion_pin = 13
@@ -19,9 +19,7 @@ def setup():
     motor_pwm = GPIO.PWM(motor_pin, 1000)
     motor_pwm.start(0)
 
-    print("calibrating...")
     time.sleep(5)
-    print("done")
 
 def distance():
     GPIO.output(trig_pin, GPIO.LOW)
@@ -34,7 +32,7 @@ def distance():
         pass
     time1 = time.time()
 
-    while GPIO.input(echo_pin) == 1: #While echo_pin is set to GPIO.HIGH
+    while GPIO.input(echo_pin) == 1 and time.time() < timeout: #While echo_pin is set to GPIO.HIGH
         pass
 
     time2 = time.time()
@@ -64,9 +62,6 @@ def loop():
     while True:
         dis = distance()
         motion = GPIO.input(motion_pin)
-        print(dis)
-        print(motion)
-        print()
         if dis is None:
             continue
 
