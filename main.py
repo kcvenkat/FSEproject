@@ -15,34 +15,42 @@ def setup():
     GPIO.setup(motion_pin, GPIO.IN)
     GPIO.setup(buzzer_pin, GPIO.OUT)
 
+    GPIO.output(buzzer_pin, GPIO.LOW)
+
     global motor_pwm
     motor_pwm = GPIO.PWM(motor_pin, 1000)
     motor_pwm.start(0)
 
     print("Calibrating")
-    time.sleep(5)
+    time.sleep(30)
     print("Setup Finished")
     print()
 
 def distance():
     GPIO.output(trig_pin, GPIO.LOW)
-    time.sleep(0.000001)
+    time.sleep(0.000002)
     GPIO.output(trig_pin, GPIO.HIGH)
     time.sleep(0.00001)
+    GPIO.output(trig_pin, GPIO.LOW)
 
     timeout = time.time() + 0.02
-    while GPIO.input(echo_pin) == 0 and time.time() < timeout: #while echo_pin is set to GPIO.LOW
+    while GPIO.input(echo_pin) == 0 and time.time() < timeout:
         pass
+    if time.time() >= timeout:
+        return None
     time1 = time.time()
 
     timeout = time.time() + 0.05
-    while GPIO.input(echo_pin) == 1 and time.time() < timeout: #While echo_pin is set to GPIO.HIGH
+    while GPIO.input(echo_pin) == 1 and time.time() < timeout:
         pass
+    if time.time() >= timeout:
+        return None
 
     time2 = time.time()
     duration = time2 - time1
     distance_cm = (duration * 340 / 2) * 100
     return distance_cm
+
 
 def motor_on(intensity, sleep_time):
         motor_pwm.ChangeDutyCycle(intensity)
@@ -94,5 +102,3 @@ if __name__ == "__main__":
         loop()
     except KeyboardInterrupt:
         GPIO.cleanup()
-
-
