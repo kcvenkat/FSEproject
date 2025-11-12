@@ -19,7 +19,9 @@ def setup():
     motor_pwm = GPIO.PWM(motor_pin, 1000)
     motor_pwm.start(0)
 
+    print("calibrating...")
     time.sleep(5)
+    print("done")
 
 def distance():
     GPIO.output(trig_pin, GPIO.LOW)
@@ -62,6 +64,9 @@ def loop():
     while True:
         dis = distance()
         motion = GPIO.input(motion_pin)
+        print(dis)
+        print(motion)
+        print()
         if dis is None:
             continue
 
