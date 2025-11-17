@@ -16,7 +16,7 @@ def setup():
     GPIO.setup(motion_pin, GPIO.IN)
     GPIO.setup(buzzer_pin, GPIO.OUT)
 
-    GPIO.output(buzzer_pin, GPIO.LOW)
+    GPIO.output(buzzer_pin, GPIO.HIGH)
 
     global motor_pwm
     motor_pwm = GPIO.PWM(motor_pin, 1000)
@@ -63,9 +63,9 @@ def motor_off():
     motor_pwm.ChangeDutyCycle(0)
 
 def buzzer_on(sleep_time):
-    GPIO.output(buzzer_pin, GPIO.HIGH)
-    time.sleep(sleep_time)
     GPIO.output(buzzer_pin, GPIO.LOW)
+    time.sleep(sleep_time)
+    GPIO.output(buzzer_pin, GPIO.HIGH)
     time.sleep(sleep_time)
 
 def buzzer_off():
